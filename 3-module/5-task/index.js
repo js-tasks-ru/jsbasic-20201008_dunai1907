@@ -4,5 +4,17 @@
  * @returns {{min:number, max:number}}  объект
  */
 function getMinMax(str) {
-  // ваш код...
+    let str1 = str
+    .split(" ")
+    .join(",")
+    .split(",")
+    .filter( item => item!=="" && isFinite(item))
+    .sort( (a, b) => a +b)
+    .map(string => +string)
+  
+    return {
+  min: Math.min(...str1),
+  max: Math.max(...str1),
+  }
+
 }
