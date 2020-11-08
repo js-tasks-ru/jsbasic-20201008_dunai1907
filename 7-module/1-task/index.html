@@ -23,6 +23,8 @@
     let container = document.querySelector('.container');
 
     container.append(ribbon.elem);
+    document.querySelector('.ribbon__item').addEventListener('ribbon-select', () => {
+      console.log ('ribbon-select', event.detail)}) 
   </script>
 </body>
 

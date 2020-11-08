@@ -5,6 +5,7 @@ export default class Carousel {
   constructor(slides) {
     this.slides = slides;
     this.elem = document.createElement(`div`);
+    this.elem.classList.add('carousel');
     this.render(slides);
     this.switch(slides);
     let keys = this.elem.querySelectorAll('.carousel__button');
