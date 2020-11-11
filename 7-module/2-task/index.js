@@ -25,12 +25,13 @@ export default class Modal {
     document.addEventListener('keydown', this.escapeClose);
   }
 
-  escapeClose = () => {
-     
+  escapeClose = (event) => {
+     if (event.code === 'Escape'){
       this.elem.remove();
       document.body.classList.remove('is-modal-open');
       document.removeEventListener('keydown', this.escapeClose);
   }
+}
   
 
   modalClick() {
@@ -62,8 +63,3 @@ export default class Modal {
     document.removeEventListener('keydown', this.escapeClose);
   }
 }
-/*document.addEventListener('keydown', function (event){
-  if (event.code === 'Escape'){
-    event.escapeClose;
-  }
-});*/
