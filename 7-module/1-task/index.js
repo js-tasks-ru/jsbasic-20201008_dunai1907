@@ -23,14 +23,11 @@ export default class RibbonMenu {
     let keys = this.elem.querySelectorAll('.ribbon__item');
     for (let i=0; i<keys.length; i++){
       if (keys[i].classList.contains('ribbon__item_active')){
-        //console.log(keys[i]);
         keys[i].classList.remove('ribbon__item_active');
-        //console.log(keys[i].classList.contains('ribbon__item_active'));
       }
     }
     event.target.classList.add('ribbon__item_active');
-    //console.log(event.target.classList.contains('ribbon__item_active'));
-
+    
     const customEvent = new CustomEvent('ribbon-select',{
       bubbles: true,
       detail: event.target.getAttribute('data-id')
@@ -45,11 +42,10 @@ export default class RibbonMenu {
     
     arrowRight.onclick = function(){
       ribbonInner.scrollBy(350, 0);
-      this.scrollClick;
     }
+    
     arrowLeft.onclick = function(){
       ribbonInner.scrollBy(-350, 0);
-      this.scrollClick;
     }
   }
     
