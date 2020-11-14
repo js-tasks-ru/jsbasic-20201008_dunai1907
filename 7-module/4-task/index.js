@@ -11,20 +11,26 @@ export default class StepSlider {
     
     <div class="slider__progress" style="width: 0%"></div>
     
-    <div class="slider__steps">
-      <span class="slider__step-active"></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>`;
+    <div class="slider__steps"></div>`;
+    let sliderSteps = this.elem.querySelector('.slider__steps');
+    for (let i = 1; i <=steps ; i++) {
+      sliderSteps.insertAdjacentHTML("afterbegin",'<span></span>');
+   };
+   let spanChild = sliderSteps.querySelectorAll('div > span');
+   for (let i = 0; i < spanChild.length; i++){
+    if( i === 0  ) {
+      spanChild[i].classList.add('slider__step-active');
+    }
+  }
     this.sliderMove();
   }
 
   sliderMove(){
+    let steps = this.steps;
     let thumb = this.elem.querySelector('.slider__thumb');
     
     thumb.addEventListener('pointerdown', () => {
+      
        
     const onMove = (event) => { 
       this.elem.classList.add('slider_dragging');
@@ -40,11 +46,12 @@ export default class StepSlider {
 
       let progress = this.elem.querySelector('.slider__progress');
 
-      let steps = this.steps;
+      //let steps = this.steps;
       let segments = steps - 1;
       let approximateValue = leftRelative * segments;
       let value = Math.round(approximateValue);
-      let valuePercents = value / segments * 100;
+      let leftPercents = leftRelative * 100;
+      //let valuePercents = value / segments * 100;
     
       this.elem.querySelector('.slider__value').innerHTML = value;
       let divSliderSteps = this.elem.querySelector('.slider__steps');
@@ -56,26 +63,37 @@ export default class StepSlider {
            spanChild[i].classList.add('slider__step-active');
         }
       }
-  thumb.style.left = `${valuePercents}%`;
-  progress.style.width = `${valuePercents}%`;
+      thumb.style.left = `${leftPercents}%`;
+      progress.style.width = `${leftPercents}%`;
     };
 
        document.addEventListener('pointermove', onMove);
 
        
-       document.onpointerup = function(){
+       document.onpointerup = function(event){
         document.removeEventListener('pointermove', onMove);
         document.onpointerup = null;
         document.querySelector('.slider').classList.remove('slider_dragging');
         
+        let left = event.clientX - document.querySelector('.slider').getBoundingClientRect().left;
+        let leftRelative = left / document.querySelector('.slider').offsetWidth;
+        let segments = steps - 1;
+        let approximateValue = leftRelative * segments;
+        let value = Math.round(approximateValue);// округление
+        let valuePercents = value / segments * 100;
+        
+        let progress = document.querySelector('.slider__progress');
+        thumb.style.left = `${valuePercents}%`;
+        progress.style.width = `${valuePercents}%`;
+
         const customEvent = new CustomEvent('slider-change',{
-          detail: +document.querySelector('.slider__value').textContent,
+          detail: value, 
           bubbles: true
         })
         document.querySelector('.slider').dispatchEvent(customEvent); 
       }
     });
-
+    
     thumb.ondragstart = () => false;
   };
 }

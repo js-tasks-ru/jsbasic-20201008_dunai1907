@@ -11,14 +11,18 @@ export default class StepSlider {
     
     <div class="slider__progress" style="width: 0%"></div>
     
-    <div class="slider__steps">
-      <span class="slider__step-active"></span>
-      <span></span>
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>`
-    
+    <div class="slider__steps"></div>`;
+
+    let sliderSteps = this.elem.querySelector('.slider__steps');
+    for (let i = 1; i <=steps ; i++) {
+      sliderSteps.insertAdjacentHTML("afterbegin",'<span></span>');
+   };
+   let spanChild = sliderSteps.querySelectorAll('div > span');
+   for (let i = 0; i < spanChild.length; i++){
+    if( i === 0  ) {
+      spanChild[i].classList.add('slider__step-active');
+    }
+  }
     this.elem.addEventListener('click', (event) => this.sliderChanges(event));
   }
 
