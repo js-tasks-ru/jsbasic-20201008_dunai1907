@@ -23,6 +23,44 @@ export default class StepSlider {
     }
   }
     this.sliderMove();
+    this.elem.addEventListener('click', (event) => this.sliderChanges(event));
+    
+  }
+
+  sliderChanges(event){ 
+    let left = event.clientX - this.elem.getBoundingClientRect().left;
+    let leftRelative = left / this.elem.offsetWidth;
+    if (leftRelative < 0) {
+      leftRelative = 0;
+    }
+    if (leftRelative > 1) {
+      leftRelative = 1;
+    }
+    let steps = this.steps;
+    let segments = steps - 1;
+    let approximateValue = leftRelative * segments;
+    let value = Math.round(approximateValue);
+    let valuePercents = value / segments * 100;
+  
+    this.elem.querySelector('.slider__value').innerHTML = value;
+    let divSliderSteps = this.elem.querySelector('.slider__steps');
+    let spanChild = divSliderSteps.querySelectorAll('div > span');
+    for (let i = 0; i < spanChild.length; i++){
+      spanChild[i].classList.remove('slider__step-active');
+      if( i === value  ) {
+        spanChild[i].classList.add('slider__step-active');
+      }
+    }
+    let thumb = this.elem.querySelector('.slider__thumb');
+    let progress = this.elem.querySelector('.slider__progress');
+    thumb.style.left = `${valuePercents}%`;
+    progress.style.width = `${valuePercents}%`;
+  
+    const customEvent = new CustomEvent('slider-change',{
+      detail: value,
+      bubbles: true
+    });
+    this.elem.dispatchEvent(customEvent);
   }
 
   sliderMove(){
@@ -41,17 +79,13 @@ export default class StepSlider {
         leftRelative = 0;
       }
       if (leftRelative > 1) {
-        leftRelative = 0;
+        leftRelative = 1;
       }
-
       let progress = this.elem.querySelector('.slider__progress');
-
-      //let steps = this.steps;
       let segments = steps - 1;
       let approximateValue = leftRelative * segments;
       let value = Math.round(approximateValue);
       let leftPercents = leftRelative * 100;
-      //let valuePercents = value / segments * 100;
     
       this.elem.querySelector('.slider__value').innerHTML = value;
       let divSliderSteps = this.elem.querySelector('.slider__steps');
@@ -77,6 +111,12 @@ export default class StepSlider {
         
         let left = event.clientX - document.querySelector('.slider').getBoundingClientRect().left;
         let leftRelative = left / document.querySelector('.slider').offsetWidth;
+        if (leftRelative < 0) {
+          leftRelative = 0;
+        }
+        if (leftRelative > 1) {
+          leftRelative = 1;
+        }
         let segments = steps - 1;
         let approximateValue = leftRelative * segments;
         let value = Math.round(approximateValue);// округление
@@ -90,7 +130,7 @@ export default class StepSlider {
           detail: value, 
           bubbles: true
         })
-        document.querySelector('.slider').dispatchEvent(customEvent); 
+        document.querySelector('.slider').dispatchEvent(customEvent);
       }
     });
     
